@@ -34,51 +34,14 @@ export default function SummaryScreen({ route }) {
     loadModel();
   }, []);
 
-  // Once our model is loaded & we have a valid photoUri we run inference on the image.
-  useEffect(() => {
-    if (model && photoUri) {
-      async function runInference() {
-        try {
-          // Load the image file from photoUri as a base64 string
-          const imgB64 = await FileSystem.readAsStringAsync(photoUri, { encoding: FileSystem.EncodingType.Base64 });
-          // Convert the base64 string to a binary string
-          const imgBuffer = tf.util.encodeString(imgB64, "base64");
-          const raw = new Uint8Array(imgBuffer);
-          // Decode the JPEG image to a tensor
-          const imageTensor = decodeJpeg(raw);
-          // Preprocess the image:
-          const resized = tf.image.resizeBilinear(imageTensor, [224, 224]);
-          const normalized = resized.div(255.0);
-          const batched = normalized.expandDims(0);
-          // Run the model prediction
-          const prediction = model.predict(batched);
-          const predictionData = prediction.dataSync();
-          const predictedIndex = predictionData.indexOf(Math.max(...predictionData));
-          // Here we simulate mapping the predicted index to a label.
-          const labels = ["Recycle", "Landfill", "Compost", "Hazardous Waste"];
-          const predictedLabel = labels[predictedIndex] || "Unknown";
-          console.log("Inference result:", predictedLabel);
-          setClassification(predictedLabel);
-        } catch (error) {
-          console.log("Error during inference:", error);
-        }
-      }
-      runInference();
-    }
-  }, [model, photoUri]);
-
-  return (
-    <View>
-      <Text style={styles.container}>Classification Results</Text>
-      {photoUri && <Image source={{ uri: photoUri }} style={styles.previewImage} />}
-      {classification && (
-        <Text style={styles.classificationText}>
-          This item needs to go to the: {classification} bin
-        </Text>
-      )}
-    </View>
-  );
-}
+	return(
+		<View>
+			<Text style={styles.container}>Results</Text>
+			{photoUri && <Image source={{ uri: photoUri }} style={styles.previewImage} />}
+			{classification && (<Text style={styles.classificationText}>Object Classification: {classification} Bin</Text>)}
+		</View>
+	)
+};
 
 const styles = StyleSheet.create({
   container: {

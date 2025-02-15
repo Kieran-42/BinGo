@@ -26,21 +26,21 @@ export default function App() {
           <Stack.Screen
               name="Home"
               component={HomeScreen}
-              options={{ title: "Welcome" }}
+              options={{ headerShown: false }}
           />
 
           {/* Camera Screen */}
           <Stack.Screen
               name="Camera"
               component={CameraScreen}
-              options={{ title: "Take a Photo" }}
+              options={{ title: "Photo Capture" }}
           />
           
           {/* Summary Screen */}
           <Stack.Screen
               name="Summary"
               component={SummaryScreen}
-              options={{ title: "Classification Result" }}
+              options={{ title: "Result" }}
           />
         </Stack.Navigator>
       </NavigationContainer>
