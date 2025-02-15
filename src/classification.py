@@ -5,8 +5,14 @@ import os
 import base64
 from io import BytesIO
 from PIL import Image
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
-# Define a singleton model loader
+# Initialize Flask app
+app = Flask(__name__)
+CORS(app)  # Allow requests from React Native
+
+# Load Model Singleton
 class ModelSingleton:
     _model = None
 
@@ -23,64 +29,54 @@ class ModelSingleton:
                 ModelSingleton._model = None
         return ModelSingleton._model
 
-# Define the class labels (Maintain the same order as in training)
+# Define class labels
 class_labels = [
     "battery", "biological", "brown-glass", "cardboard", "clothes", "green-glass",
     "metal", "paper", "plastic", "shoes", "trash", "white-glass"
 ]
 
-
 def image_classification(img_input):
     """
-    Classifies an image using a pre-loaded MobileNetV2 model.
-
-    Parameters:
-        img_input (str, bytes, or PIL Image): Image data as a file path, base64 string, or PIL image object.
-
-    Returns:
-        str or None: The predicted class label if confidence is 95% or higher, else None.
+    Classifies an image using the pre-loaded model.
     """
     model = ModelSingleton.get_model()
     if model is None:
-        print("Error: Model is not loaded. Cannot classify images.")
+        print("Error: Model is not loaded.")
         return None
 
     try:
-        # Handle different input formats
-        if isinstance(img_input, str):
-            if img_input.startswith("data:image"):  # Base64 string from React Native
-                base64_data = img_input.split(",")[1]  # Remove the prefix
-                img = Image.open(BytesIO(base64.b64decode(base64_data)))
-            elif os.path.exists(img_input):  # Local file path
-                img = image.load_img(img_input, target_size=(224, 224))
-            else:
-                print("Error: Invalid image input format")
-                return None
-        elif isinstance(img_input, bytes):  # If directly received as bytes
-            img = Image.open(BytesIO(img_input))
-        else:  # Assume it's already a PIL image object
-            img = img_input
-
-        # Resize image for the model
-        img = img.resize((224, 224))
-
-        # Convert image to array and normalize
+        # Decode Base64 Image
+        img = Image.open(BytesIO(base64.b64decode(img_input)))
+        img = img.resize((224, 224))  # Resize for model
         img_array = image.img_to_array(img) / 255.0
-        img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+        img_array = np.expand_dims(img_array, axis=0)
 
-        # Make a prediction
+        # Predict
         predictions = model.predict(img_array)[0]
-        if len(predictions) != len(class_labels):
-            print("Error: Model output does not match expected class labels.")
-            return None
-
         predicted_class = np.argmax(predictions)
         predicted_label = class_labels[predicted_class]
-        confidence = predictions[predicted_class] * 100  # Convert to percentage
+        confidence = predictions[predicted_class] * 100
 
-        # Return label if confidence is high
-        return predicted_label if confidence >= 95 else None
-
+        return {"class": predicted_label, "confidence": confidence}
     except Exception as e:
         print(f"Error processing image: {e}")
         return None
+
+# Flask API Endpoint
+@app.route('/classify', methods=['POST'])
+def classify():
+    try:
+        data = request.json
+        if "image" not in data:
+            return jsonify({"error": "No image provided"}), 400
+        
+        result = image_classification(data["image"])
+        if result:
+            return jsonify(result)
+        else:
+            return jsonify({"error": "Classification failed"}), 500
+    except Exception as e:
+        return jsonify({"error": f"Server error: {e}"}), 500
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
