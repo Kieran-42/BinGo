@@ -29,6 +29,7 @@ class_labels = [
     "metal", "paper", "plastic", "shoes", "trash", "white-glass"
 ]
 
+
 def image_classification(img_input):
     """
     Classifies an image using a pre-loaded MobileNetV2 model.

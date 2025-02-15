@@ -54,6 +54,20 @@ export default function CameraPage() {
 				await MediaLibrary.createAssetAsync(photo.uri);
 				// from here we need to go to the summary screen and pass the photoUri as a param.
 				navigation.navigate("Summary", {photoUri: photo.uri});
+
+                setLoading(true);
+                const fileUri = photo.uri.replace("file://", ""); // Remove "file://" prefix for compatibility
+
+                // Execute the Python script with the image file
+                exec(`python ..\\src\\classify.py "${fileUri}"`, (err, stdout, stderr) => {
+                    setLoading(false);
+                    if (err) {
+                        console.log("Python error:", stderr);
+                        Alert.alert("Classification Failed", "Error processing image.");
+                    } else {
+                        Alert.alert("Classification Result", `Detected: ${stdout.trim()}`);
+                    }
+				});
 			}
 		} catch (error) {
 			console.log("Unexpected Error taking a photo: ", error);
