@@ -41,7 +41,7 @@ export default function StatisticScreen({ navigation }) {
 // Fetch classification count for a given material
 const RequestStats = async (material) => {
   try {
-    const response = await fetch(`http://10.0.2.2:5000/stats?category=${material}`, {
+    const response = await fetch(`http://bingo-production-38b8.up.railway.app/stats?category=${material}`, {
       method: "GET",
     });
 
