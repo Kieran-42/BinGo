@@ -113,16 +113,13 @@ const getInstructions = async (wasteType) => {
 export default function SummaryScreen({ route }) {
   const navigation = useNavigation(); // Navigation hook
 
-  // This is the uri that we passed from the camera screen page
-  const { photoUri } = route.params || {};
-
-  // Placeholder classification (replace this later with actual model output)
-  const [classification, setClassification] = useState("General Waste");
+  // This is the uri and classification that we passed from the camera screen page
+  const { photoUri, classification } = route.params || {};
 
   return (
     <View style={styles.container}>
       {/* Title */}
-      <Text style={styles.title}>Waste Type: {classification}</Text>
+      <Text style={styles.title}>Waste Type: {classification?.class || "Unknown"}</Text>
 
       {/* Image Preview */}
       {photoUri && <Image source={{ uri: photoUri }} style={styles.previewImage} />}
@@ -130,7 +127,7 @@ export default function SummaryScreen({ route }) {
       {/* Classification Text */}
       {classification && (
         <Text style={styles.classificationText}>
-          Classification: {classification} Bin
+          Classification: {classification.class} Bin
         </Text>
       )}
 
