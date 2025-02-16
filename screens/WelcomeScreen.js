@@ -28,11 +28,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   welcomeText: {
     fontSize: 35,
     fontWeight: 'bold',
     color: '#3C6049',
   },
+  
   subText: {
     fontSize: 15,
     fontWeight: 'semi-bold',

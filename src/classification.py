@@ -3,6 +3,7 @@ from tensorflow.keras.preprocessing import image
 import numpy as np
 import os
 import base64
+import json
 from io import BytesIO
 from PIL import Image
 from flask import Flask, request, jsonify
@@ -12,6 +13,15 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)  # Allow React Native requests
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB file size limit
+
+# Path to JSON file for tracking classification counts
+CLASSIFICATION_COUNT_FILE = "classification_counts.json"
+
+# Ensure JSON file exists
+def initialize_json():
+    if not os.path.exists(CLASSIFICATION_COUNT_FILE):
+        with open(CLASSIFICATION_COUNT_FILE, "w") as f:
+            json.dump({}, f)
 
 # Load Model Singleton
 class ModelSingleton:
@@ -36,6 +46,22 @@ class_labels = [
     "metal", "paper", "plastic", "shoes", "trash", "white-glass"
 ]
 
+def update_classification_count(label):
+    """Update classification count in the JSON file."""
+    try:
+        with open(CLASSIFICATION_COUNT_FILE, "r") as f:
+            counts = json.load(f)
+
+        # Increment the count for the classified item
+        counts[label] = counts.get(label, 0) + 1
+
+        # Save updated counts back to file
+        with open(CLASSIFICATION_COUNT_FILE, "w") as f:
+            json.dump(counts, f, indent=4)
+
+    except Exception as e:
+        print(f"Error updating classification count: {e}")
+
 def image_classification(img_input):
     """
     Classifies an image using the pre-loaded model.
@@ -58,6 +84,10 @@ def image_classification(img_input):
         predicted_label = class_labels[predicted_class]
 
         confidence = float(predictions[predicted_class] * 100)  # ✅ Convert to Python float
+        
+        # Update classification count
+        update_classification_count(predicted_label)
+
         return {"class": predicted_label, "confidence": confidence}
 
     except Exception as e:
@@ -80,5 +110,16 @@ def classify():
     except Exception as e:
         return jsonify({"error": f"Server error: {e}"}), 500
 
+@app.route('/stats', methods=['GET'])
+def get_classification_stats():
+    """Endpoint to return classification statistics."""
+    try:
+        with open(CLASSIFICATION_COUNT_FILE, "r") as f:
+            counts = json.load(f)
+        return jsonify(counts)
+    except Exception as e:
+        return jsonify({"error": f"Server error: {e}"}), 500
+
 if __name__ == "__main__":
+    initialize_json()  # Ensure JSON file is initialized
     app.run(host="0.0.0.0", port=5000, debug=True)
