@@ -4,9 +4,6 @@ import { View, Text, Pressable, StyleSheet, Alert} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import * as MediaLibrary from "expo-media-library";
 import {CameraTypeToFacingMode} from "expo-camera/build/web/WebConstants";
-//import RNFS from "react-native-fs";
-
-import * as FileSystem from "expo-file-system";
 
 // Camera Page
 export default function CameraPage() {
@@ -47,41 +44,30 @@ export default function CameraPage() {
 			throw new Error("Media library permission not granted");
 		}
 	}
-	const sendPhotoToBackend = async (uri) => {
-		try {
-			const base64 = await FileSystem.readAsStringAsync(uri, {
-				encoding: FileSystem.EncodingType.Base64, // Convert to Base64
-			});
-	
-			const response = await fetch("http://127.0.0.1:5000/classify", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ image: base64 }),
-			});
-	
-			const result = await response.json();
-			console.log("Classification Result:", result);
-			if (result.error) {
-				Alert.alert("Error", result.error);
-			} else {
-				Alert.alert("Classification", `Detected: ${result.class} (Confidence: ${result.confidence.toFixed(2)}%)`);
-			}
-		} catch (error) {
-			console.error("Error sending image:", error);
-		}
-	};
-	
 
 	const takePicture = async () => {
 		try {
 			const photo = await cameraRef.current.takePictureAsync();
 			if (photo?.uri) {
-				await sendPhotoToBackend(photo.uri);
 				setPhotoUri(photo.uri);
 				await ensureMediaLibraryPermission();
 				await MediaLibrary.createAssetAsync(photo.uri);
 				// from here we need to go to the summary screen and pass the photoUri as a param.
 				navigation.navigate("Summary", {photoUri: photo.uri});
+
+                setLoading(true);
+                const fileUri = photo.uri.replace("file://", ""); // Remove "file://" prefix for compatibility
+
+                // Execute the Python script with the image file
+                exec(`python ..\\src\\classify.py "${fileUri}"`, (err, stdout, stderr) => {
+                    setLoading(false);
+                    if (err) {
+                        console.log("Python error:", stderr);
+                        Alert.alert("Classification Failed", "Error processing image.");
+                    } else {
+                        Alert.alert("Classification Result", `Detected: ${stdout.trim()}`);
+                    }
+				});
 			}
 		} catch (error) {
 			console.log("Unexpected Error taking a photo: ", error);
