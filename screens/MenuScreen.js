@@ -2,21 +2,24 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function StatisticScreen({ navigation }) {
+export default function MenuScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={30} color="#3C6049" />
       </TouchableOpacity>
 
-      {/* Title */}
-      <Text style={styles.title}>Statistics</Text>
+      <Text style={styles.title}>Menu</Text>
 
-      {/* Placeholder for Statistics Data */}
-      <View style={styles.contentBox}>
-        <Text style={styles.contentText}>Statistics data will be displayed here.</Text>
-      </View>
+      {/* About */}
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("About")}>
+        <Text style={styles.menuText}>About</Text>
+      </TouchableOpacity>
+
+      {/* FAQs */}
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("FAQs")}>
+        <Text style={styles.menuText}>FAQs</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -27,7 +30,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#D3E8D2",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
   },
 
   backButton: {
@@ -43,22 +45,17 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
 
-  contentBox: {
-    backgroundColor: "#FFFFFF",
-    width: "90%",
-    padding: 20,
+  menuItem: {
+    backgroundColor: "#3C6049",
+    padding: 15,
     borderRadius: 10,
+    marginVertical: 10,
+    width: "80%",
     alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
   },
 
-  contentText: {
-    fontSize: 18,
-    color: "#3C6049",
-    textAlign: "center",
+  menuText: {
+    fontSize: 20,
+    color: "#FFFFFF",
   },
 });

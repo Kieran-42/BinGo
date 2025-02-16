@@ -11,6 +11,7 @@ import SummaryScreen from "./screens/SummaryScreen";
 import StatisticScreen from "./screens/StatisticScreen";
 import CardScreen from "./screens/CardScreen";
 import HistoryScreen from "./screens/HistoryScreen";
+import MenuScreen from "./screens/MenuScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,13 @@ export default function App() {
               options={{ headerShown: false }}
           />
 
+          {/* Menu Screen */}
+          <Stack.Screen
+              name="Menu"
+              component={MenuScreen}
+              options={{ headerShown: false }}
+          />
+
           {/* Camera Screen */}
           <Stack.Screen
               name="Camera"
@@ -43,7 +51,7 @@ export default function App() {
           <Stack.Screen
               name="Statistic"
               component={StatisticScreen}
-              options={{ title: "Statistics" }}
+              options={{ headerShown: false }}
           />
 
           {/* Cards Screen */}

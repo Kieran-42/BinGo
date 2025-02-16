@@ -9,7 +9,7 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.diagonalShape} />
 
       {/* Top-left "hamburger" menu */}
-      <TouchableOpacity style={styles.menuButton} onPress={() => { /* handle menu */ }}>
+      <TouchableOpacity style={styles.menuButton} onPress={() => navigation.navigate("Menu")}>
         <Ionicons name="menu" size={40} color="#FFFFFF" />
       </TouchableOpacity>
 
