@@ -39,30 +39,28 @@ export default function CameraPage() {
 
     // Send photo to Flask backend
     const sendPhotoToBackend = async (uri) => {
-        try {
-            // ✅ Fix: Convert image to Base64 using `expo-file-system`
-            const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-
-            // ✅ Fix: Use correct API URL
-            const apiUrl = Platform.OS === "android" ? "http://10.0.2.2:5000/classify" : "http://localhost:5000/classify";
-            const response = await fetch(apiUrl, { // Use "localhost" for iOS
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ image: base64 }),
-            });
-
-            const result = await response.json();
-            console.log("Classification Result:", result);
-
-            if (result.error) {
-                Alert.alert("Error", result.error);
-            } else {
-                Alert.alert("Classification", `Detected: ${result.class} (Confidence: ${result.confidence.toFixed(2)}%)`);
-            }
-        } catch (error) {
-            console.error("Error sending image:", error);
-        }
-    };
+		try {
+			const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+	
+			const apiUrl = "https://bingo-production-38b8.up.railway.app/classify";
+			const response = await fetch(apiUrl, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ image: base64 }),
+			});
+	
+			const result = await response.json();
+			console.log("Full API Response:", result); // ✅ Debugging log
+	
+			// ✅ Handle "undefined" case
+			const confidence = result.confidence && result.confidence !== "undefined" ? result.confidence.toFixed(2) : "N/A";
+			
+			Alert.alert("Classification", `Detected: ${result.class} (Confidence: ${confidence}%)`);
+		} catch (error) {
+			console.error("Error sending image:", error);
+		}
+	};
+	
 
     // Capture photo and handle backend communication
     const takePicture = async () => {

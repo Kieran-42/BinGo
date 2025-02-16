@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+const categories = [
+  "battery", "biological", "cardboard", "clothes", "metal", "paper", "plastic", "shoes", "trash", "glass"
+];
+
 export default function StatisticScreen({ navigation }) {
-  const [plasticCount, setPlasticCount] = useState(null);
+  const [stats, setStats] = useState({});
 
   useEffect(() => {
     const fetchStats = async () => {
-      const count = await RequestStats("plastic");
-      if (count !== null) {
-        setPlasticCount(count);
+      const fetchedStats = {};
+      for (const category of categories) {
+        const count = await RequestStats(category);
+        if (count !== null) {
+          fetchedStats[category] = count;
+        }
       }
+      setStats(fetchedStats);
     };
 
     fetchStats();
@@ -26,14 +34,16 @@ export default function StatisticScreen({ navigation }) {
       {/* Title */}
       <Text style={styles.title}>Statistics</Text>
 
-      {/* Placeholder for Statistics Data */}
-      <View style={styles.contentBox}>
-        <Text style={styles.contentText}>
-          {plasticCount !== null
-            ? `You collected ${plasticCount} pieces of plastic.`
-            : "Loading statistics..."}
-        </Text>
-      </View>
+      {/* Statistics Data */}
+      <ScrollView style={styles.contentBox}>
+        {categories.map((category) => (
+          <Text key={category} style={styles.contentText}>
+            {stats[category] !== undefined
+              ? `${category}: ${stats[category]}`
+              : `Loading ${category} statistics...`}
+          </Text>
+        ))}
+      </ScrollView>
     </View>
   );
 }
@@ -41,7 +51,7 @@ export default function StatisticScreen({ navigation }) {
 // Fetch classification count for a given material
 const RequestStats = async (material) => {
   try {
-    const response = await fetch(`http://10.0.2.2:5000/stats?category=${material}`, {
+    const response = await fetch(`https://bingo-production-38b8.up.railway.app/stats?category=${material}`, {
       method: "GET",
     });
 
@@ -49,8 +59,8 @@ const RequestStats = async (material) => {
     console.log("Classification Stats:", result);
 
     if (result.error) {
-      Alert.alert("Error", result.error);
-      return null; // Return null on error
+      //Alert.alert("Error", result.error);
+      return 0; // Return null on error
     } else {
       return result[material]; // Extract and return the count
     }
@@ -87,8 +97,6 @@ const styles = StyleSheet.create({
     width: "90%",
     padding: 20,
     borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
@@ -99,5 +107,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#3C6049",
     textAlign: "center",
+    marginBottom: 10,
   },
 });
