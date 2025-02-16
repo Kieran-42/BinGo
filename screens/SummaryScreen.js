@@ -10,7 +10,7 @@ export default function SummaryScreen({ route }) {
   const { photoUri } = route.params || {};
 
   // Placeholder classification (replace this later with actual model output)
-  const [classification, setClassification] = useState("General Waste");
+  const [classification, setClassification] = useState("General  Waste");
 
   return (
     <View style={styles.container}>
@@ -19,13 +19,6 @@ export default function SummaryScreen({ route }) {
 
       {/* Image Preview */}
       {photoUri && <Image source={{ uri: photoUri }} style={styles.previewImage} />}
-
-      {/* Classification Text */}
-      {classification && (
-        <Text style={styles.classificationText}>
-          Classification: {classification} Bin
-        </Text>
-      )}
 
       {/* Home Button at Bottom */}
       <View style={styles.homeButtonBackground}>
@@ -71,8 +64,9 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
     color: "#3C6049",
-    top: 50,
-    marginBottom: 100,
+    top: 10,
+    marginTop:-150,
+    marginBottom: 40,
     textAlign: "center",
   },
 
