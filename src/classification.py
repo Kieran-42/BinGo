@@ -132,5 +132,11 @@ def get_classification_stats():
 
 
 if __name__ == "__main__":
-    initialize_json()  # Ensure JSON file is initialized
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    import os
+    from werkzeug.serving import WSGIRequestHandler
+
+    PORT = int(os.environ.get("PORT", 5000))
+
+    WSGIRequestHandler.protocol_version = "HTTP/1.1"  # ✅ Force HTTP/1.1
+    app.run(host="0.0.0.0", port=PORT, debug=True)
+
