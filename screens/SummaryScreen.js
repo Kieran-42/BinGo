@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 // Import TensorFlow.js and its React Native integration
 import * as tf from "@tensorflow/tfjs";
-import "@tensorflow/tfjs-react-native";
-import { decodeJpeg } from "@tensorflow/tfjs-react-native";
+//import "@tensorflow/tfjs-react-native";
 import * as FileSystem from "expo-file-system";
 
 export default function SummaryScreen({ route }) {
@@ -17,7 +16,7 @@ export default function SummaryScreen({ route }) {
   const [model, setModel] = useState(null);
 
   // Load the Keras model when the component mounts
-  useEffect(() => {
+  /*useEffect(() => {
     async function loadModel() {
       try {
         // Wait for tfjs to be ready
@@ -32,7 +31,7 @@ export default function SummaryScreen({ route }) {
       }
     }
     loadModel();
-  }, []);
+  }, []);*/
 
 	return(
 		<View>
