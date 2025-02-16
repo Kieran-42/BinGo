@@ -1,15 +1,14 @@
+// Import: Native React Modules
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+// Function: Welcome Screen
 const WelcomeScreen = ({ navigation }) => {
   useEffect(() => {
-    // Simulate some loading or startup work
     const timer = setTimeout(() => {
-      // After 2 seconds, navigate to the Home screen
       navigation.replace('Home');
     }, 2000);
-
-    // Clean up the timer to prevent memory leaks if the component unmounts
+    
     return () => clearTimeout(timer);
   }, [navigation]);
 
@@ -21,6 +20,7 @@ const WelcomeScreen = ({ navigation }) => {
   );
 };
 
+// Stylesheet: Objects
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,7 +1,9 @@
+// Import: Native React Modules
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+// Function: Home Screen
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -59,6 +61,7 @@ export default function HomeScreen({ navigation }) {
   );
 }
 
+// Stylesheet: Objects
 const styles = StyleSheet.create({
   diagonalShape: {
     width: 0,

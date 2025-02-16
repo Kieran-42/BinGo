@@ -1,14 +1,10 @@
+// Import: Native React Modules
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-// List of waste types
 const wasteTypes = ["battery", "compost", "glass", "metal", "paper", "plastic", "shoes", "trash"];
-
-// Bingo column labels
 const bingoLabels = ["B", "I", "N", "G", "O"];
-
-// Map waste types to Ionicons
 const wasteIcons = {
   battery: "battery-charging",
   compost: "leaf",
@@ -20,6 +16,7 @@ const wasteIcons = {
   trash: "trash-bin",
 };
 
+// Function: Card Screen
 export default function CardScreen({ navigation }) {
   const getRandomWasteType = () => {
     return wasteTypes[Math.floor(Math.random() * wasteTypes.length)];
@@ -61,6 +58,7 @@ export default function CardScreen({ navigation }) {
   );
 }
 
+// Stylesheet: For Objects
 const styles = StyleSheet.create({
   diagonalShape: {
     width: 0,

@@ -1,9 +1,9 @@
-// App.js
+// Import: Native React Modules
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-// Import the screens
+// Import: Screens
 import WelcomeScreen from "./screens/WelcomeScreen";
 import HomeScreen from "./screens/HomeScreen";
 import CameraScreen from "./screens/CameraScreen";
@@ -12,11 +12,12 @@ import StatisticScreen from "./screens/StatisticScreen";
 import CardScreen from "./screens/CardScreen";
 import HistoryScreen from "./screens/HistoryScreen";
 import MenuScreen from "./screens/MenuScreen";
-import AboutScreen from "./screens/AboutScreen"; // Added About Screen
-import FAQScreen from "./screens/FAQScreen"; // Added FAQ Screen
+import AboutScreen from "./screens/AboutScreen";
+import FAQScreen from "./screens/FAQScreen";
 
 const Stack = createNativeStackNavigator();
 
+// Function: Main Application
 export default function App() {
   return (
     <NavigationContainer>

@@ -1,3 +1,4 @@
+// Import: Native React Modules
 import React, { useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
@@ -6,20 +7,18 @@ import * as MediaLibrary from "expo-media-library";
 import { CameraTypeToFacingMode } from "expo-camera/build/web/WebConstants";
 import * as FileSystem from "expo-file-system"; // ✅ Fix: Use Expo FileSystem instead of RNFS
 
-// Camera Page
+// Function: Camera Page
 export default function CameraPage() {
-    // Camera permissions and state
     const [cameraPermission, requestCameraPermission] = useCameraPermissions();
     const cameraRef = useRef(null);
     const [photoUri, setPhotoUri] = useState(null);
     const navigation = useNavigation();
 
-    // If permission is not granted, show request button
     if (!cameraPermission) { return null; }
     if (!cameraPermission.granted) {
         return (
             <View>
-                <Text>We need permission to access the camera.</Text>
+                <Text>Access Camera Permission Required.</Text>
                 <Pressable style={styles.permissionButton} onPress={requestCameraPermission}>
                     <Text style={styles.permissionButtonText}>Grant Permission</Text>
                 </Pressable>
@@ -27,7 +26,6 @@ export default function CameraPage() {
         );
     }
 
-    // Ensure permission before saving images
     const ensureMediaLibraryPermission = async () => {
         const { status } = await MediaLibrary.requestPermissionsAsync();
         if (status !== "granted") {
@@ -36,13 +34,10 @@ export default function CameraPage() {
         }
     };
 
-    // Send photo to Flask backend
     const sendPhotoToBackend = async (uri) => {
         try {
-            // ✅ Fix: Convert image to Base64 using `expo-file-system`
             const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
 
-            // ✅ Fix: Use correct API URL
             const response = await fetch("http://10.0.2.2:5000/classify", { // Use "localhost" for iOS
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -62,11 +57,10 @@ export default function CameraPage() {
         }
     };
 
-    // Capture photo and handle backend communication
     const takePicture = async () => {
         try {
             const photo = await cameraRef.current.takePictureAsync();
-            //await sendPhotoToBackend(photo.uri);
+            // await sendPhotoToBackend(photo.uri);
             if (photo?.uri) {
                 setPhotoUri(photo.uri);
                 await ensureMediaLibraryPermission();
@@ -93,7 +87,7 @@ export default function CameraPage() {
     );
 }
 
-// Stylesheet
+// Stylesheet: For Objects
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: "#000" },
     permissionContainer: { flex: 1, justifyContent: "center", alignItems: "center", paddingHorizontal: 20 },

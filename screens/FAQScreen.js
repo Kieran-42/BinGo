@@ -1,7 +1,9 @@
+// Import: Native React Module
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+// Fuction: FAQ Screen
 export default function FAQScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -47,6 +49,7 @@ export default function FAQScreen({ navigation }) {
   );
 }
 
+// Stylesheet: Objects
 const styles = StyleSheet.create({
   container: {
     flex: 1,

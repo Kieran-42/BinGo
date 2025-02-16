@@ -1,47 +1,47 @@
+// Import: Native React Modules
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-// Developer Data
 const developers = [
-  {
-    name: "Mihir Gajjar",
+  { name: "Mihir Gajjar",
     role: "Fullstack Developer",
     description: "Currently a Junior student majoring in Finance at Santa Clara University.",
     image: require("../assets/MihirProfile.jpeg"),
   },
-  {
-    name: "Kaiwen Du",
+
+  { name: "Kaiwen Du",
     role: "Frontend Developer",
     description: "Currently a Freshman student majoring in Computer Science at Santa Clara University.",
     image: require("../assets/KaiwenProfile.jpg"),
   },
-  {
-    name: "Jemian Lam",
+
+  { name: "Jemian Lam",
     role: "Frontend Developer",
     description: "Currently a Freshman student majoring in Computer Science at Santa Clara University.",
     image: require("../assets/JemianProfile.png"),
   },
-  {
-    name: "Stanley Mei",
+
+  { name: "Stanley Mei",
     role: "AI Engineer",
     description: "Currently a Graduate student majoring in Computer Science at Santa Clara University.",
     image: require("../assets/StanleyProfile.jpg"),
   },
-  {
-    name: "Kieran Pazmino",
+
+  { name: "Kieran Pazmino",
     role: "Backend Developer",
     description: "Currently a Junior student majoring in Computer Engineering with a strong passion for robotics and AI machine learning.",
     image: require("../assets/KieranProfile.jpeg"),
   },
-  {
-    name: "Wesley Cordier",
+
+  { name: "Wesley Cordier",
     role: "Backend Developer",
     description: "Currently a Freshman student majoring in Computer Science at Santa Clara University.",
     image: require("../assets/WesleyProfile.jpeg"),
   },
 ];
 
+// Function: About Screen
 export default function AboutScreen({ navigation }) {
   return (
     <View style={styles.container}>

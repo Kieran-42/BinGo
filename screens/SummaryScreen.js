@@ -1,15 +1,13 @@
+// Import: Native React Modules
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons"; // Import Ionicons
 
+// Function: Summary Screen
 export default function SummaryScreen({ route }) {
-  const navigation = useNavigation(); // Navigation hook
-
-  // This is the uri that we passed from the camera screen page
+  const navigation = useNavigation();
   const { photoUri } = route.params || {};
-
-  // Placeholder classification (replace this later with actual model output)
   const [classification, setClassification] = useState("General Waste");
 
   return (
@@ -41,6 +39,7 @@ export default function SummaryScreen({ route }) {
   );
 }
 
+// Stylesheet: Objects
 const styles = StyleSheet.create({
   diagonalShape: {
     width: 0,

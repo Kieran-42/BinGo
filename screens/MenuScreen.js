@@ -1,7 +1,9 @@
+// Import: Native React Modules
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+// Function: MenuScreen
 export default function MenuScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -31,6 +33,7 @@ export default function MenuScreen({ navigation }) {
   );
 }
 
+// Stylesheet: Objects
 const styles = StyleSheet.create({
     diagonalShape: {
         width: 0,

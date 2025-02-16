@@ -1,9 +1,10 @@
+// Import: Native React Modules
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+// Function: History Screen
 export default function HistoryScreen({ route, navigation }) {
-  // State to store history entries
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export default function HistoryScreen({ route, navigation }) {
   );
 }
 
+// Stylesheet: Objects
 const styles = StyleSheet.create({
   diagonalShape: {
     width: 0,
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#D3E8D2",
     alignItems: "center",
-    paddingTop: 80, // Space for status bar
+    paddingTop: 80,
   },
 
   backButton: {

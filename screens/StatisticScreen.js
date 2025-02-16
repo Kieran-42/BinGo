@@ -1,7 +1,9 @@
+// Import: Native React Modules
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+// Function: Statistic Screen
 export default function StatisticScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -21,6 +23,7 @@ export default function StatisticScreen({ navigation }) {
   );
 }
 
+// Stylesheet: Objects
 const styles = StyleSheet.create({
   container: {
     flex: 1,
