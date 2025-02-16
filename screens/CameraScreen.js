@@ -39,44 +39,45 @@ export default function CameraPage() {
 
     // Send photo to Flask backend
     const sendPhotoToBackend = async (uri) => {
-		try {
-			const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-	
-			const apiUrl = "http://192.168.1.140:5000/classify";
-			const response = await fetch(apiUrl, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ image: base64 }),
-			});
-	
-			const result = await response.json();
-			console.log("Full API Response:", result); // ✅ Debugging log
-	
-			// ✅ Handle "undefined" case
-			const confidence = result.confidence && result.confidence !== "undefined" ? result.confidence.toFixed(2) : "N/A";
-			
-			Alert.alert("Classification", `Detected: ${result.class} (Confidence: ${confidence}%)`);
-		} catch (error) {
-			console.error("Error sending image:", error);
-		}
-	};
-	
+        try {
+            const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+
+            const apiUrl = "http://192.168.1.140:5000/classify";
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ image: base64 }),
+            });
+
+            const result = await response.json();
+            console.log("Full API Response:", result); // ✅ Debugging log
+
+            // ✅ Handle "undefined" case
+            const confidence = result.confidence && result.confidence !== "undefined" ? result.confidence.toFixed(2) : "N/A";
+            
+            Alert.alert("Classification", `Detected: ${result.class} (Confidence: ${confidence}%)`);
+            return result;
+        } catch (error) {
+            console.error("Error sending image:", error);
+            return null;
+        }
+    };
 
     // Capture photo and handle backend communication
     const takePicture = async () => {
         try {
             const photo = await cameraRef.current.takePictureAsync();
-            await sendPhotoToBackend(photo.uri);
+            const classificationResult = await sendPhotoToBackend(photo.uri);
             if (photo?.uri) {
                 setPhotoUri(photo.uri);
                 await ensureMediaLibraryPermission();
-				const savedAsset = await MediaLibrary.createAssetAsync(photo.uri);
-				let assetUri = savedAsset.uri
-				if(Platform.OS === "ios"){
-					const assetInfo = await MediaLibrary.getAssetInfoAsync(savedAsset);
-					assetUri = assetInfo.localUri;
-				}
-                navigation.navigate("Summary", { photoUri: assetUri });
+                const savedAsset = await MediaLibrary.createAssetAsync(photo.uri);
+                let assetUri = savedAsset.uri;
+                if (Platform.OS === "ios") {
+                    const assetInfo = await MediaLibrary.getAssetInfoAsync(savedAsset);
+                    assetUri = assetInfo.localUri;
+                }
+                navigation.navigate("Summary", { photoUri: assetUri, classification: classificationResult.class });
             }
         } catch (error) {
             console.error("Unexpected error taking a photo:", error);
