@@ -51,7 +51,7 @@ export default function StatisticScreen({ navigation }) {
 // Fetch classification count for a given material
 const RequestStats = async (material) => {
   try {
-    const response = await fetch(`http://192.168.1.140:5000/stats?category=${material}`, {
+    const response = await fetch(`http://172.31.219.165:5000/stats?category=${material}`, {
       method: "GET",
     });
 

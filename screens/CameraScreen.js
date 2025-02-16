@@ -42,7 +42,7 @@ export default function CameraPage() {
         try {
             const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
 
-            const apiUrl = "http://192.168.1.140:5000/classify"; //Change to your local IP address
+            const apiUrl = "http://172.31.219.165:5000/classify"; //Change to your local IP address
             const response = await fetch(apiUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
