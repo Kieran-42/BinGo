@@ -1,8 +1,21 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function StatisticScreen({ navigation }) {
+  const [plasticCount, setPlasticCount] = useState(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      const count = await RequestStats("plastic");
+      if (count !== null) {
+        setPlasticCount(count);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
   return (
     <View style={styles.container}>
       {/* Back Button */}
@@ -15,11 +28,37 @@ export default function StatisticScreen({ navigation }) {
 
       {/* Placeholder for Statistics Data */}
       <View style={styles.contentBox}>
-        <Text style={styles.contentText}>Statistics data will be displayed here.</Text>
+        <Text style={styles.contentText}>
+          {plasticCount !== null
+            ? `You collected ${plasticCount} pieces of plastic.`
+            : "Loading statistics..."}
+        </Text>
       </View>
     </View>
   );
 }
+
+// Fetch classification count for a given material
+const RequestStats = async (material) => {
+  try {
+    const response = await fetch(`http://10.0.2.2:5000/stats?category=${material}`, {
+      method: "GET",
+    });
+
+    const result = await response.json();
+    console.log("Classification Stats:", result);
+
+    if (result.error) {
+      Alert.alert("Error", result.error);
+      return null; // Return null on error
+    } else {
+      return result[material]; // Extract and return the count
+    }
+  } catch (error) {
+    console.error("Error fetching stats:", error);
+    return null;
+  }
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import React, { useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
@@ -66,12 +67,17 @@ export default function CameraPage() {
     const takePicture = async () => {
         try {
             const photo = await cameraRef.current.takePictureAsync();
-            //await sendPhotoToBackend(photo.uri);
+            await sendPhotoToBackend(photo.uri);
             if (photo?.uri) {
                 setPhotoUri(photo.uri);
                 await ensureMediaLibraryPermission();
-                await MediaLibrary.createAssetAsync(photo.uri);
-                navigation.navigate("Summary", { photoUri: photo.uri });
+				const savedAsset = await MediaLibrary.createAssetAsync(photo.uri);
+				let assetUri = savedAsset.uri
+				if(Platform.OS === "ios"){
+					const assetInfo = await MediaLibrary.getAssetInfoAsync(savedAsset);
+					assetUri = assetInfo.localUri;
+				}
+                navigation.navigate("Summary", { photoUri: assetUri });
             }
         } catch (error) {
             console.error("Unexpected error taking a photo:", error);

@@ -11,7 +11,7 @@ from flask_cors import CORS
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)  # Allow React Native requests
+CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB file size limit
 
 # Path to JSON file for tracking classification counts
@@ -112,13 +112,24 @@ def classify():
 
 @app.route('/stats', methods=['GET'])
 def get_classification_stats():
-    """Endpoint to return classification statistics."""
+    """Endpoint to return classification statistics, with an optional category query."""
     try:
         with open(CLASSIFICATION_COUNT_FILE, "r") as f:
             counts = json.load(f)
-        return jsonify(counts)
+
+        category = request.args.get("category")  # Get category from query parameter
+        
+        if category:
+            if category in counts:
+                return jsonify({category: counts[category]})
+            else:
+                return jsonify({"error": "Category not found"}), 404
+        else:
+            return jsonify(counts)  # Return all stats if no category is specified
+
     except Exception as e:
         return jsonify({"error": f"Server error: {e}"}), 500
+
 
 if __name__ == "__main__":
     initialize_json()  # Ensure JSON file is initialized
