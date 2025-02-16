@@ -42,7 +42,7 @@ export default function CameraPage() {
 		try {
 			const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
 	
-			const apiUrl = "https://bingo-production-38b8.up.railway.app/classify";
+			const apiUrl = "http://192.168.1.140:5000/classify";
 			const response = await fetch(apiUrl, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
