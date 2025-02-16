@@ -44,7 +44,8 @@ export default function CameraPage() {
             const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
 
             // ✅ Fix: Use correct API URL
-            const response = await fetch("http://10.0.2.2:5000/classify", { // Use "localhost" for iOS
+            const apiUrl = Platform.OS === "android" ? "http://10.0.2.2:5000/classify" : "http://localhost:5000/classify";
+            const response = await fetch(apiUrl, { // Use "localhost" for iOS
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ image: base64 }),
