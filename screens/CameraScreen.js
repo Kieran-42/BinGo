@@ -64,7 +64,7 @@ export default function CameraPage() {
 
     // Capture photo and handle backend communication
     const takePicture = async () => {
-        /*try {
+        try {
             const photo = await cameraRef.current.takePictureAsync();
             const classificationResult = await sendPhotoToBackend(photo.uri);
             if (photo?.uri) {
@@ -80,25 +80,7 @@ export default function CameraPage() {
             }
         } catch (error) {
             console.error("Unexpected error taking a photo:", error);
-        }*/
-            try {
-                // Construct the file path (assuming "image.jpg" is stored in the app's document directory)
-                const imagePath = FileSystem.documentDirectory + "image.jpg";
-                console.log("Using image at path:", imagePath);
-    
-                // Check if file exists
-                const fileInfo = await FileSystem.getInfoAsync(imagePath);
-                if (!fileInfo.exists) {
-                    Alert.alert("Error", "image.jpg not found in local storage.");
-                    console.error("File does not exist at:", imagePath);
-                    return;
-                }
-    
-                // Send the image to the backend
-                await sendPhotoToBackend(imagePath);
-            } catch (error) {
-                console.error("Error accessing stored image:", error);
-            }
+        }
     };
 
     return (
