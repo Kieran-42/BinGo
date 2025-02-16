@@ -40,29 +40,34 @@ export default function CameraPage() {
     // Send photo to Flask backend
     const sendPhotoToBackend = async (uri) => {
         try {
-            // ✅ Fix: Convert image to Base64 using `expo-file-system`
+            // ✅ Convert image to Base64
             const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-
-            // ✅ Fix: Use correct API URL
-            const apiUrl = Platform.OS === "android" ? "http://10.0.2.2:5000/classify" : "http://bingo-production-38b8.up.railway.app/classify";
-            const response = await fetch(apiUrl, { // Use "localhost" for iOS
+    
+            const apiUrl = "http://bingo-production-38b8.up.railway.app/classify";  // ✅ Set API URL
+    
+            console.log("📤 Sending image to API:", apiUrl); // ✅ Log request URL
+    
+            const response = await fetch(apiUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ image: base64 }),
             });
-
+    
             const result = await response.json();
-            console.log("Classification Result:", result);
-
+            console.log("✅ Backend Response:", result); // ✅ Log response
+    
             if (result.error) {
                 Alert.alert("Error", result.error);
             } else {
-                Alert.alert("Classification", `Detected: ${result.class} (Confidence: ${result.confidence.toFixed(2)}%)`);
+                const confidenceValue = typeof result.confidence === "number" ? result.confidence.toFixed(2) : "N/A";
+                Alert.alert("Classification", `Detected: ${result.class} (Confidence: ${confidenceValue}%)`);
             }
         } catch (error) {
-            console.error("Error sending image:", error);
+            console.error("❌ Error sending image:", error);
+            Alert.alert("Error", "Failed to send image.");
         }
     };
+    
 
     // Capture photo and handle backend communication
     const takePicture = async () => {

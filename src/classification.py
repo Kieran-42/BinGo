@@ -70,58 +70,57 @@ def update_classification_count(label):
         print(f"Error updating classification count: {e}")
 
 def image_classification(img_input):
-    """
-    Classifies an image using the pre-loaded model.
-    """
     model = ModelSingleton.get_model()
     if model is None:
-        return {"class": "unknown", "confidence": "undefined"}
+        print("Error: Model not loaded")
+        return {"class": "unknown", "confidence": 0.0}
 
     try:
-        # Decode Base64 Image
-        img = Image.open(BytesIO(base64.b64decode(img_input)))
+        print("Decoding image...")  # ✅ Log decoding
+        img_bytes = base64.b64decode(img_input)
+        img = Image.open(BytesIO(img_bytes))
         img = img.resize((224, 224))  # Resize for model
         img_array = image.img_to_array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
 
-        # Predict
+        print("Running model prediction...")  # ✅ Log prediction start
         predictions = model.predict(img_array)[0]
         predicted_class = np.argmax(predictions)
         predicted_label = class_labels[predicted_class]
+        confidence = predictions[predicted_class] * 100
 
-        confidence = predictions[predicted_class] * 100  # Convert to percentage
+        print(f"Predicted: {predicted_label}, Confidence: {confidence:.2f}%")  # ✅ Log results
 
-        # Merge glass categories
-        if predicted_label in glass_labels:
-            predicted_label = "glass"
-
-        # Apply confidence threshold
-        confidence_threshold = 5  # Only accept high-confidence predictions
-        if confidence < confidence_threshold:
-            return {"class": "uncertain", "confidence": f"{confidence:.2f}%"}
-
-        # Update classification count
-        update_classification_count(predicted_label)
-
-        return {"class": predicted_label, "confidence": f"{confidence:.2f}%"}
+        return {"class": predicted_label, "confidence": round(confidence, 2)}
 
     except Exception as e:
-        return {"class": "unknown", "confidence": "undefined", "error": str(e)}
+        print(f"Error during classification: {e}")  # ✅ Log errors
+        return {"class": "unknown", "confidence": 0.0, "error": str(e)}
+
 
 # Flask API Endpoint
 @app.route('/classify', methods=['POST'])
 def classify():
     try:
+        print("📩 Received API request...")  # ✅ Log request
+
         data = request.json
         if "image" not in data:
+            print("❌ Error: No image provided")
             return jsonify({"error": "No image provided"}), 400
-        
+
+        print("✅ Image received. Processing...")
         result = image_classification(data["image"])
+
+        print(f"✅ Classification Result: {result}")  # ✅ Log prediction
         return jsonify(result)
 
     except Exception as e:
+        print(f"❌ Server error: {e}")  # ✅ Log errors
         return jsonify({"error": f"Server error: {e}"}), 500
+
 
 if __name__ == "__main__":
     initialize_json()  # Ensure JSON file is initialized
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))  # ✅ Use Railway's dynamic port
+    app.run(host="0.0.0.0", port=port, debug=True)

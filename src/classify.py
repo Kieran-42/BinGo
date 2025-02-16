@@ -1,14 +1,9 @@
-import sys
-from classification import image_classification  # Assuming your function is in model.py
+import base64
 
-if len(sys.argv) < 2:
-    print("Error: No image file provided")
-    sys.exit(1)
+with open("test.jpg", "rb") as img_file:
+    base64_string = base64.b64encode(img_file.read()).decode("utf-8")
 
-image_path = sys.argv[1]
-result = image_classification(image_path)
+print(base64_string[:100])  # Print first 100 characters to verify
 
-if result:
-    print(result)
-else:
-    print("Unknown")
+with open("output_file.txt", "w") as txt_file:
+    txt_file.write(base64_string)
