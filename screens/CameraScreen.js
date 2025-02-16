@@ -4,9 +4,6 @@ import { View, Text, Pressable, StyleSheet, Alert} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import * as MediaLibrary from "expo-media-library";
 import {CameraTypeToFacingMode} from "expo-camera/build/web/WebConstants";
-//import RNFS from "react-native-fs";
-
-import * as FileSystem from "expo-file-system";
 
 // Camera Page
 export default function CameraPage() {
@@ -48,35 +45,32 @@ export default function CameraPage() {
 		}
 	}
 	const sendPhotoToBackend = async (uri) => {
-		try {
-			const base64 = await FileSystem.readAsStringAsync(uri, {
-				encoding: FileSystem.EncodingType.Base64, // Convert to Base64
-			});
-	
-			const response = await fetch("http://127.0.0.1:5000/classify", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ image: base64 }),
-			});
-	
-			const result = await response.json();
-			console.log("Classification Result:", result);
-			if (result.error) {
-				Alert.alert("Error", result.error);
-			} else {
-				Alert.alert("Classification", `Detected: ${result.class} (Confidence: ${result.confidence.toFixed(2)}%)`);
-			}
-		} catch (error) {
-			console.error("Error sending image:", error);
-		}
-	};
-	
+        try {
+            const base64 = await RNFS.readFile(uri, "base64"); // Convert image to Base64
+
+            const response = await fetch("http://127.0.0.1:5000/classify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ image: base64 }),
+            });
+
+            const result = await response.json();
+            console.log("Classification Result:", result);
+            if (result.error) {
+                Alert.alert("Error", result.error);
+            } else {
+                Alert.alert("Classification", `Detected: ${result.class} (Confidence: ${result.confidence.toFixed(2)}%)`);
+            }
+        } catch (error) {
+            console.error("Error sending image:", error);
+        }
+    };
 
 	const takePicture = async () => {
 		try {
 			const photo = await cameraRef.current.takePictureAsync();
+			await sendPhotoToBackend(photo.uri);
 			if (photo?.uri) {
-				await sendPhotoToBackend(photo.uri);
 				setPhotoUri(photo.uri);
 				await ensureMediaLibraryPermission();
 				await MediaLibrary.createAssetAsync(photo.uri);
