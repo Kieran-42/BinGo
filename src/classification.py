@@ -10,7 +10,8 @@ from flask_cors import CORS
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)  # Allow requests from React Native
+CORS(app)  # Allow React Native requests
+app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB file size limit
 
 # Load Model Singleton
 class ModelSingleton:
@@ -55,9 +56,10 @@ def image_classification(img_input):
         predictions = model.predict(img_array)[0]
         predicted_class = np.argmax(predictions)
         predicted_label = class_labels[predicted_class]
-        confidence = predictions[predicted_class] * 100
 
+        confidence = float(predictions[predicted_class] * 100)  # ✅ Convert to Python float
         return {"class": predicted_label, "confidence": confidence}
+
     except Exception as e:
         print(f"Error processing image: {e}")
         return None
