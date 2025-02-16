@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#F5F5F5", // Light gray background
+    backgroundColor: "#D3E8D2",
   },
   title: {
     fontSize: 22,
