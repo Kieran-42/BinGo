@@ -21,13 +21,15 @@ const wasteIcons = {
 };
 
 export default function CardScreen({ navigation }) {
-  // Function to get a random waste type
   const getRandomWasteType = () => {
     return wasteTypes[Math.floor(Math.random() * wasteTypes.length)];
   };
 
   return (
     <View style={styles.container}>
+      {/* Diagonal background shape */}
+      <View style={styles.diagonalShape} />
+
       {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={35} color="#3C6049" />
@@ -60,6 +62,21 @@ export default function CardScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  diagonalShape: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 300,
+    borderBottomWidth: 600,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "#83AE96",
+    position: "absolute",
+    marginLeft: -50,
+    top: 275,
+    left: 200,
+    transform: [{ rotate: "0deg" }],
+  },
+  
   container: {
     flex: 1,
     backgroundColor: "#D3E8D2",
@@ -69,16 +86,14 @@ const styles = StyleSheet.create({
 
   backButton: {
     position: "absolute",
-    top: Platform.OS === "android" ? StatusBar.currentHeight + 10 : 50, // Lower the back button
+    top: 80,
     left: 20,
-    zIndex: 10,
   },
 
   bingoHeader: {
     flexDirection: "row",
     justifyContent: "center",
     width: "90%",
-    marginBottom: 10,
   },
 
   headerCell: {
@@ -90,6 +105,8 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "bold",
     color: "#3C6049",
+    marginTop: 50,
+    marginBottom: 25,
   },
 
   bingoCard: {

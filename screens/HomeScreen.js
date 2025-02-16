@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
 
   logoBin: {
-    color: "#BCBCBC",
+    color: "#515151",
 		fontSize: 105,
 		fontWeight: "bold",
 		marginTop: 50,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
 
   logoG: {
     color: "#3C6049",
-		fontSize: 110,
+		fontSize: 100,
 		fontWeight: "bold",
 		marginTop: 78,
     marginLeft: 5,
@@ -130,9 +130,9 @@ const styles = StyleSheet.create({
   logoO: {
     width: 110,
 		height: 110,
-		marginTop: 71,
+		marginTop: 65,
     marginLeft: -5,
-		marginBottom: 79,
+		marginBottom: 80,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   identifyButton: {
     width: 155,
     height: 155,
-    bottom: 5,
+    bottom: 15,
     backgroundColor: '#8FB98F',
     borderRadius: 20,
     alignItems: 'center',
@@ -163,10 +163,7 @@ const styles = StyleSheet.create({
     color: "#515151",
 		fontSize: 20,
 		fontWeight: "bold",
-		marginTop: 10,
-		marginBottom: 40,
-		marginLeft: 10,
-		marginRight: 7,
+		marginBottom: 50,
   },
 
   bottomRow: {

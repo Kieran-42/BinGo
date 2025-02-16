@@ -1,47 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, AsyncStorage } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function HistoryScreen({ route, navigation }) {
+  // State to store history entries
   const [history, setHistory] = useState([]);
 
-  // Load saved history from AsyncStorage when the screen loads
-  useEffect(() => {
-    loadHistory();
-  }, []);
-
-  // Save new entries when route params change
   useEffect(() => {
     if (route.params?.newEntry) {
-      const updatedHistory = [route.params.newEntry, ...history];
-      setHistory(updatedHistory);
-      saveHistory(updatedHistory); // Persist to storage
+      setHistory((prevHistory) => [route.params.newEntry, ...prevHistory]); // Add new entry at the top
     }
   }, [route.params?.newEntry]);
 
-  // Function to load history from AsyncStorage
-  const loadHistory = async () => {
-    try {
-      const storedHistory = await AsyncStorage.getItem("wasteHistory");
-      if (storedHistory) {
-        setHistory(JSON.parse(storedHistory));
-      }
-    } catch (error) {
-      console.log("Failed to load history:", error);
-    }
-  };
-
-  // Function to save history to AsyncStorage
-  const saveHistory = async (data) => {
-    try {
-      await AsyncStorage.setItem("wasteHistory", JSON.stringify(data));
-    } catch (error) {
-      console.log("Failed to save history:", error);
-    }
-  };
-
   return (
     <View style={styles.container}>
+      {/* Diagonal background shape */}
+      <View style={styles.diagonalShape} />
+      
       {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={35} color="#3C6049" />
@@ -68,6 +43,21 @@ export default function HistoryScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+  diagonalShape: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 300,
+    borderBottomWidth: 600,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "#83AE96",
+    position: "absolute",
+    marginLeft: -50,
+    top: 275,
+    left: 200,
+    transform: [{ rotate: "0deg" }],
+  },
+
   container: {
     flex: 1,
     backgroundColor: "#D3E8D2",
@@ -77,13 +67,12 @@ const styles = StyleSheet.create({
 
   backButton: {
     position: "absolute",
-    top: 100,
+    top: 80,
     left: 20,
   },
 
   title: {
-    top: 20,
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#3C6049",
     marginBottom: 20,
