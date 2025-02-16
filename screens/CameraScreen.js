@@ -66,7 +66,7 @@ export default function CameraPage() {
     const takePicture = async () => {
         try {
             const photo = await cameraRef.current.takePictureAsync();
-            await sendPhotoToBackend(photo.uri);
+            //await sendPhotoToBackend(photo.uri);
             if (photo?.uri) {
                 setPhotoUri(photo.uri);
                 await ensureMediaLibraryPermission();
