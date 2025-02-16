@@ -65,7 +65,7 @@ export default function App() {
           <Stack.Screen
               name="History"
               component={HistoryScreen}
-              options={{ title: "History" }}
+              options={{ headerShown: false }}
           />
           
           {/* Summary Screen */}
