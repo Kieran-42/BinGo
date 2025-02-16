@@ -34,3 +34,34 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+
+# Ignore node_modules (important for React Native)
+node_modules/
+
+# Ignore build outputs
+android/build/
+ios/Pods/
+ios/build/
+
+# Ignore logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore environment files (if you use API keys, secrets)
+.env
+.env.local
+.env.*.local
+
+# Ignore Expo and cache files
+.expo/
+.expo-shared/
+.cache/
+
+# Ignore system and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
