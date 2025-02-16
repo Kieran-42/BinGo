@@ -113,7 +113,7 @@ def image_classification(img_input):
             predicted_label = "glass"
 
         # 🔹 Confidence Thresholding (ignore low-confidence predictions)
-        confidence_threshold = 50  # Only accept predictions above 50%
+        confidence_threshold = 00  # Only accept predictions above 50%
         if confidence < confidence_threshold:
             return {"class": "uncertain", "confidence": str(confidence)}
 
