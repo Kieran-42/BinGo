@@ -83,11 +83,11 @@ def image_classification(img_input):
         predicted_class = np.argmax(predictions)
         predicted_label = class_labels[predicted_class]
 
-        confidence = float(predictions[predicted_class] * 100)  # ✅ Convert to Python float
+        confidence = float(predictions[predicted_class] * 100)  #Convert to Python float
         
         # Update classification count
         update_classification_count(predicted_label)
-
+        # Return classification result
         return {"class": predicted_label, "confidence": confidence}
 
     except Exception as e:

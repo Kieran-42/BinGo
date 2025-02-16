@@ -5,7 +5,7 @@ import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import * as MediaLibrary from "expo-media-library";
 import { CameraTypeToFacingMode } from "expo-camera/build/web/WebConstants";
-import * as FileSystem from "expo-file-system"; // ✅ Fix: Use Expo FileSystem instead of RNFS
+import * as FileSystem from "expo-file-system";
 
 // Camera Page
 export default function CameraPage() {
@@ -42,7 +42,7 @@ export default function CameraPage() {
         try {
             const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
 
-            const apiUrl = "http://192.168.1.140:5000/classify";
+            const apiUrl = "http://192.168.1.140:5000/classify"; //Change to your local IP address
             const response = await fetch(apiUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -50,11 +50,10 @@ export default function CameraPage() {
             });
 
             const result = await response.json();
-            console.log("Full API Response:", result); // ✅ Debugging log
-
-            // ✅ Handle "undefined" case
+            console.log("Full API Response:", result);
+            //undefined case
             const confidence = result.confidence && result.confidence !== "undefined" ? result.confidence.toFixed(2) : "N/A";
-            
+            //Alerts user to waste and condfidence level
             Alert.alert("Classification", `Detected: ${result.class} (Confidence: ${confidence}%)`);
             return result;
         } catch (error) {
@@ -90,7 +89,7 @@ export default function CameraPage() {
                 ref={cameraRef}
                 style={styles.camera}
                 mode="picture"
-                facing={CameraTypeToFacingMode.back} // ✅ Camera implementation unchanged
+                facing={CameraTypeToFacingMode.back}
             />
             <Pressable style={styles.captureButton} onPress={takePicture}>
                 <Text style={styles.captureButtonText}>Capture</Text>

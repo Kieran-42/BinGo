@@ -123,13 +123,13 @@ const getInstructions = (wasteType) => {
 
 export default function SummaryScreen({ route }) {
 	const navigation = useNavigation();
-	const { photoUri, classification } = route.params || {}; // classification is a string
+	const { photoUri, classification } = route.params || {};
 
 	const [instructions, setInstructions] = useState({ name: "", locations: [], instructionBulletins: [] });
 
 	useEffect(() => {
 		if (classification) {
-			const instructionData = getInstructions(classification); // Pass the string to getInstructions()
+			const instructionData = getInstructions(classification);
 			setInstructions(instructionData);
 		}
 	}, [classification]);
