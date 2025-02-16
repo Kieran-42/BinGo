@@ -24,15 +24,8 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       {/* Identify (Camera) Button */}
-      <TouchableOpacity 
-        style={styles.identifyButton} 
-        onPress={() => navigation.navigate("Camera")}
-      >
-        <Ionicons style={styles.identifyIcon}
-          name="camera"
-          size={100}
-          color="#FFFFFF" 
-        />
+      <TouchableOpacity style={styles.identifyButton} onPress={() => navigation.navigate("Camera")}>
+        <Ionicons style={styles.identifyIcon} name="camera" size={100} color="#FFFFFF" />
       </TouchableOpacity>
       <Text style={styles.identifyLabel}>Identify</Text>
 
@@ -40,27 +33,27 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.bottomRow}>
         {/* Statistics */}
         <View style={styles.iconWrapper}>
-          <TouchableOpacity style={styles.shapeButton}>
+          <TouchableOpacity style={styles.shapeButton} onPress={() => navigation.navigate("Statistic")}>
             <Ionicons name="stats-chart" size={40} color="#FFFFFF" />
           </TouchableOpacity>
           <Text style={styles.iconLabel}>Statistics</Text>
         </View>
 
-        {/* Card */}
+        {/* Cards */}
         <View style={styles.iconWrapper}>
-          <TouchableOpacity style={styles.shapeButton}>
+          <TouchableOpacity style={styles.shapeButton} onPress={() => navigation.navigate("Card")}>
             <Ionicons name="albums" size={40} color="#FFFFFF" />
           </TouchableOpacity>
-          <Text style={styles.iconLabel}>Card</Text>
+          <Text style={styles.iconLabel}>Cards</Text>
         </View>
 
         {/* History */}
         <View style={styles.iconWrapper}>
-          <TouchableOpacity style={styles.shapeButton}>
+          <TouchableOpacity style={styles.shapeButton} onPress={() => navigation.navigate("History")}>
             <Ionicons name="time" size={40} color="#FFFFFF" />
           </TouchableOpacity>
           <Text style={styles.iconLabel}>History</Text>
-      </View>
+        </View>
       </View>
     </View>
   );

@@ -8,6 +8,9 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import HomeScreen from "./screens/HomeScreen";
 import CameraScreen from "./screens/CameraScreen";
 import SummaryScreen from "./screens/SummaryScreen";
+import StatisticScreen from "./screens/StatisticScreen";
+import CardScreen from "./screens/CardScreen";
+import HistoryScreen from "./screens/HistoryScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +37,27 @@ export default function App() {
               name="Camera"
               component={CameraScreen}
               options={{ title: "Photo Capture" }}
+          />
+
+          {/* Statistics Screen */}
+          <Stack.Screen
+              name="Statistic"
+              component={StatisticScreen}
+              options={{ title: "Statistics" }}
+          />
+
+          {/* Cards Screen */}
+          <Stack.Screen
+              name="Card"
+              component={CardScreen}
+              options={{ title: "Cards" }}
+          />
+
+          {/* History Screen */}
+          <Stack.Screen
+              name="History"
+              component={HistoryScreen}
+              options={{ title: "History" }}
           />
           
           {/* Summary Screen */}
