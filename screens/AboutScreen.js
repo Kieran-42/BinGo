@@ -32,7 +32,7 @@ const developers = [
     name: "Kieran Pazmino",
     role: "Backend Developer",
     description: "Currently a Junior student majoring in Computer Engineering with a strong passion for robotics and AI machine learning.",
-    // Add image
+    image: require("../assets/KieranProfile.jpeg"),
   },
   {
     name: "Wesley Cordier",

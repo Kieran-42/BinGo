@@ -14,6 +14,9 @@ export default function SummaryScreen({ route }) {
 
   return (
     <View style={styles.container}>
+      {/* Diagonal background shape */}
+      <View style={styles.diagonalShape} />
+      
       {/* Title */}
       <Text style={styles.title}>Waste Type: {classification}</Text>
 
@@ -39,6 +42,21 @@ export default function SummaryScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
+  diagonalShape: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 300,
+    borderBottomWidth: 600,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: "#83AE96",
+    position: "absolute",
+    marginLeft: -50,
+    top: 275,
+    left: 200,
+    transform: [{ rotate: "0deg" }],
+  },
+
   container: {
     flex: 1,
     backgroundColor: "#D3E8D2",
